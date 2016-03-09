@@ -110,3 +110,49 @@ bool InterfaceInventory::VerifyInventoryFull(unsigned int color)
 	POINT item = GetItemCoords(27);
 	return pix.SearchPixelArea(color, item.x, item.y, item.x + INV_ITEM_WIDTH, item.y + INV_ITEM_HEIGHT, 10);
 }
+
+//give color, returns the item index of the item. returns -1 if no item.
+bool InterfaceInventory::SearchIndexForColor(int invIndex, unsigned int color)
+{
+	POINT item;
+	item = GetItemCoords(invIndex);
+	if (pix.SearchPixelArea(color, item.x, item.y, item.x + INV_ITEM_WIDTH, item.y + INV_ITEM_HEIGHT, 3)) //check if item is in this slot
+		return true;
+	return false;
+}
+
+int InterfaceInventory::SearchInventoryForItem(unsigned int color)
+{
+	int index = -1;
+	for (int i = 1; i <= 27; i++) //JERRY RIGGED FOR NOE
+	{
+		if (SearchIndexForColor(i, color))
+			return i;
+	}
+	return index;
+}
+
+//attempts to eat an item of given color. returns false if thers is no such item
+bool InterfaceInventory::AttemptToEat(unsigned int color)
+{
+	VerifyActiveInventory();
+	int index = SearchInventoryForItem(color);
+	if (index != -1)
+	{
+		MoveToItem(index);
+		mouse.LeftClick();
+	}
+	else
+		return false;
+	return true;
+}
+
+//attempts to eat an item of given color after some HP marker has been hit. returns false if thers is no such food
+bool InterfaceInventory::AttemptToEatAtHp(unsigned int color, int HpAmount)
+{
+	if (CheckHealthAmount(HpAmount)) //if health is still up, return true
+		return true;
+	if (AttemptToEat(color)) //if successfully eat. return true
+		return true;
+	return false; // if not at health limit, and also no food to eat
+}

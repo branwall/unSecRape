@@ -16,13 +16,17 @@ int InterfaceStats::VerifyCombat()
 	if (CheckEnemyDead())
 		return 3;
 
-	//check for red in health bar at TopLeft!
-	if (pix.SearchPixelArea(RedTL, 10 + SCREEN, 71, 131 + SCREEN, 86,15))
+	//check for red AND green in health bar at TopLeft!
+	if ((pix.SearchPixelArea(RedTL, 10 + SCREEN, 71, 131 + SCREEN, 86, 15)) && (pix.SearchPixelArea(GreenTL, 10 + SCREEN, 71, 131 + SCREEN, 86, 15)))
 		return 1;
 
+	//check for red AND green in health bar at TopLeft!
+	//if (pix.SearchPixelArea(RedTL, 10 + SCREEN, 71, 131 + SCREEN, 86, 15))
+	//	return 1;
+
 	//check for green in health bar at TopLeft!
-	if (pix.SearchPixelArea(GreenTL, 10 + SCREEN, 71, 131 + SCREEN, 86, 15))
-		return 1;
+	//if (pix.SearchPixelArea(GreenTL, 10 + SCREEN, 71, 131 + SCREEN, 86, 15))
+	//	return 1;
 
 	//check the red heart xp gain
 	if (pix.VerifyPixelColor(0xdd4f0100, 843 + SCREEN, 63))
@@ -53,7 +57,8 @@ bool InterfaceStats::FindEnemy(unsigned int color, int x1, int y1, int x2, int y
 	if (Enemy.x == -1) //no Enemy found
 		return false;
 
-	mouse.MouseMove(Enemy);
+	mouse.SetDeviation(mouseDeviation); // set the mouse deviatons
+	mouse.MouseMoveArea(Enemy.x-4,Enemy.y-4,Enemy.x+4,Enemy.y+4);
 	Sleep(300);
 	if (VerifyTopLeftText(HOVER_NPC) || VerifyHoverText(HOVER_NPC))//confirm mouse on Enemy
 	{
@@ -61,6 +66,12 @@ bool InterfaceStats::FindEnemy(unsigned int color, int x1, int y1, int x2, int y
 		return true;
 	}
 	return false;
+}
+
+//locates an enemy given its a color and a region it should be found in, rightclicks them
+bool InterfaceStats::FindEnemy(unsigned int color, Area region)
+{
+	return FindEnemy(color,region.x1, region.y1, region.x2, region.y2);
 }
 
 //starts assuming an enemy is right clicked
@@ -219,5 +230,74 @@ int InterfaceStats::GetSector(Area region, POINT coords)
 	if (sector > numSectors)
 		sector = numSectors;
 	return sector;
+
+}
+
+
+//returns true if color is found in bubble 
+bool InterfaceStats::CheckExperienceCircle(unsigned int color, int numBubbles)
+{
+	if (numBubbles = 1)
+		return pix.SearchPixelArea(color, 800+SCREEN, 60, 830+SCREEN, 70, 10);
+	return false;
+}
+
+//takes a selected area and returns a specific sector of said area.
+//returns area of just that sector.
+//*NOTE splits into vertical sectors. Sectors are 0 indexed
+Area InterfaceStats::GetBLOOMSectorCoords(Area region, int sector)
+{
+	Area Sector;
+	int deltaX = region.x2 - region.x1;
+	int deltaY = region.y2 - region.y1; 
+	float sectorX = deltaX / numSectors; //partition the area into sector sized chunks
+	float sectorY = deltaY / numSectors; //partition the area into sector sized chunks
+	sectorX = sectorX / 2;
+	sectorY = sectorY / 2;
+
+	Sector.x1 = region.x1 + (deltaX / 2) - (sectorX*(sector + 1)); //center of search space + sector amnt
+	Sector.x2 = region.x1 + (deltaX / 2) + (sectorX*(sector + 1));
+	Sector.y1 = region.y1 + (deltaY / 2) - (sectorY*(sector + 1));
+	Sector.y2 = region.y1 + (deltaY / 2) + (sectorY*(sector + 1));
+
+	//boundary conditions
+	if (Sector.x1 < region.x1)
+		Sector.x1 = region.x1;
+
+	if (Sector.x2 > region.x2)
+		Sector.x2 = region.x2;
+
+	if (Sector.y1 < region.y1)
+		Sector.y1 = region.y1;
+
+	if (Sector.y2 > region.y2)
+		Sector.y2 = region.y2;
+
+	return Sector;
+}
+
+//searches for an enemy using bloom sectoring
+bool InterfaceStats::SearchEnemyBloom(unsigned int color, int x1, int y1, int x2, int y2)
+{
+	mouseDeviation = 30; //set ccause idea is monster or whatever is close
+	Area region(x1, y1, x2, y2);
+	Area Sector;
+	for (int i = 0; i < numSectors; i++)//iterate through teh sectors looking for enemy
+	{
+		printf("Searching Sector %2i\n", i);
+		Sector = GetBLOOMSectorCoords(region, i);
+		if (FindEnemy(color, Sector))
+		{
+			mouseDeviation = 250; //reset
+			return true;
+		}
+	}
+	mouseDeviation = 250;//reset
+	return false;
+}
+
+bool InterfaceStats::DetecMovement()
+{
+	return false;
 
 }

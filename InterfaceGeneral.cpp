@@ -1,5 +1,50 @@
 #include "InterfaceGeneral.h"
 
+
+InterfaceGeneral::InterfaceGeneral() // constructor (sets hotkeys)
+{
+	//arguments Window, HK-ID, SPECIAL-KEYS, HOTKEY
+	RegisterHotKey(NULL, 1, 0, ESCAPE); //Pause the program, (needs enter to resume)
+	RegisterHotKey(NULL, 2, MOD_SHIFT, ESCAPE);
+
+	//PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE);
+	//GetMessage(&msg, 0, 0, 0); //set to receive
+}
+
+
+InterfaceGeneral::~InterfaceGeneral() // Destructor (delets hotkeys on program exit)
+{
+	UnregisterHotKey(NULL, 1);
+	UnregisterHotKey(NULL,2);
+
+	//HandleHotkeys();
+}
+
+//handles what hotkeys do
+void InterfaceGeneral::HandleHotkeys()
+{
+	PeekMessage(&msg, NULL, 0, 0, PM_REMOVE);
+	if (msg.message == WM_HOTKEY)
+	{
+		if (msg.wParam == 1) //1st hotkey
+		{
+			printf("================ Program Paused - Press ENTER to continue ==================\n");
+			std::cin.ignore(); //pause until enter is pressed
+		}
+
+		if (msg.wParam == 2) //2nd hotkey
+		{
+			printf("================ Program EXITING ==================\n");
+			exit(0); //exit porgram
+		}
+
+
+		msg.message = 0; //reset the message so that it resume;
+		return;
+	}
+}
+
+
 //verifies that hover text contains a specified color
 bool InterfaceGeneral::VerifyHoverText(unsigned int color) 
 {
@@ -97,6 +142,20 @@ bool InterfaceGeneral::ChooseMenuOptionColorCheck(int optionChoice, unsigned int
 	return true;
 }
 
+//Check if maybe a level up perhaps
+bool InterfaceGeneral::CheckLevelUp()
+{
+	bool check = false;
+	check = pix.SearchPixelArea(0x00008000, 290, 908, 466, 935, 10);
+	if (check)
+	{
+		printf("LEVELED uppppp\n");
+		mouse.MouseMoveArea(160,970,340,990);
+		mouse.LeftClick();
+	}
+	return check;
+}
+
 //when all else fails. gtfo
 void InterfaceGeneral::Logout()
 {
@@ -109,5 +168,56 @@ void InterfaceGeneral::Logout()
 	mouse.MouseMoveArea(Logout);
 	Sleep(400);
 	mouse.LeftClick();
+	return;
+}
+
+//checks for black background in health circle
+//amount should be some 1-100 value. 
+//returns true if health is there
+bool InterfaceGeneral::CheckHealthAmount(int amount)
+{
+	bool result = true; //assumes you ahve the health
+	unsigned int HealthBGBlack1 = 0x13131300; //colors of the background blacki in teh circles
+	unsigned int HealthBGBlack2 = 0x0b0b0b00;
+
+	if (amount >= 90)
+	{
+		if ((pix.VerifyPixelColor(HealthBGBlack1, 1471, 85)) || (pix.VerifyPixelColor(HealthBGBlack2, 1471, 85))) //90 % pixel
+			result = false;
+	}
+
+	else if (amount >= 70 && amount < 90)
+	{
+		if ((pix.VerifyPixelColor(HealthBGBlack1, 1462, 90)) || (pix.VerifyPixelColor(HealthBGBlack2, 1462, 90)))
+			result = false;
+	}
+
+	else if (amount >= 50 && amount < 70)
+	{
+		if ((pix.VerifyPixelColor(HealthBGBlack1, 1462, 95)) || (pix.VerifyPixelColor(HealthBGBlack2, 1462, 95)))
+			result = false;
+	}
+
+	else if (amount >= 35 && amount < 50)
+	{
+		if ((pix.VerifyPixelColor(HealthBGBlack1, 1464, 100)) || (pix.VerifyPixelColor(HealthBGBlack2, 1464, 100)))
+			result = false;
+	}
+	else if (amount >= 25 && amount < 35)
+	{
+		if ((pix.VerifyPixelColor(HealthBGBlack1, 1464, 103)) || (pix.VerifyPixelColor(HealthBGBlack2, 1464, 103)))
+			result = false;
+	}
+
+
+
+	return result;
+}
+
+
+//sets mouse move speed 0.1-1.0 where lower is faster
+void InterfaceGeneral::SetMouseSpeed(float speed)
+{
+	mouse.ChangeSpeed(speed);
 	return;
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include "Mouse.h"
 #include "Pixel.h"
+#include <iostream>
 
 
 class InterfaceGeneral
@@ -10,8 +11,16 @@ protected:
 	PixelHandler pix;
 	POINT MousePos;
 	bool menu5Option = false;
+	MSG msg; //for hotkey message recieving
 
 public:
+	InterfaceGeneral(); // constructor (sets hotkeys)
+
+	~InterfaceGeneral(); // destructor (del hotkeys)
+
+	//handles what hotkeys do
+	virtual void HandleHotkeys();
+
 	//verifies that hover text contains a specified color
 	// !WARNING! hover text only works on items that have more than just a USE first option
 	virtual bool VerifyHoverText(unsigned int color);
@@ -33,6 +42,18 @@ public:
 	//Chooses a menu option only if 'HOVER_xxx' exists on desired option
 	bool ChooseMenuOptionColorCheck(int optionChoice, unsigned int color);
 
+	//check if leveled up
+	bool CheckLevelUp();
+
 	//when all else fails. gtfo
 	void Logout();
+
+	//checks for black background in health circle
+	//amount should be some 1-100 value. 
+	//returns true if health is there, false if not
+	bool CheckHealthAmount(int amount);
+
+	//sets mouse move speed 0.1-1.0 where lower is faster
+	void SetMouseSpeed(float speed);
+
 };
