@@ -1,6 +1,8 @@
 #include <iostream>
 #include "InterfaceInventory.h"
 #include "BotThievingPickpocket.h"
+#include "BotMagicCurse.h"
+#include "BotMeleeCow.h"
 #include "InterfaceStats.h"
 #include <stdio.h>
 
@@ -26,9 +28,13 @@ int main()
 	PixelHandler pix;
 	//pix.DEBUG();
 	InterfaceStats stat;
-	BotThievingPickpocket me;
-	me.run();
 
+	//BotMagicCurse me;
+	//BotThievingPickpocket me;
+	BotMeleeCow me;
+
+	me.run();
+	std::cin.ignore();
 	return 0;
 }
 

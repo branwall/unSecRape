@@ -45,6 +45,10 @@ public:
 	//check if leveled up
 	bool CheckLevelUp();
 
+	//check if leveled up
+	//modes ignore certain skill levels (like hp at mode 0)
+	bool CheckLevelUp(int mode);
+
 	//when all else fails. gtfo
 	void Logout();
 

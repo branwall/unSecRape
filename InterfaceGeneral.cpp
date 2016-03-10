@@ -156,6 +156,26 @@ bool InterfaceGeneral::CheckLevelUp()
 	return check;
 }
 
+//Check if maybe a level up perhaps
+// mode '0' ignores hitpoints levels
+bool InterfaceGeneral::CheckLevelUp(int mode)
+{
+	bool check = false;
+	check = pix.SearchPixelArea(0x00008000, 290, 908, 466, 935, 10);
+	if (check)
+	{
+		if (mode == 0) //skip hp levels
+		{
+			if (pix.SearchPixelArea(0xb6145000, 37, 895, 180, 980, 20)) //if found hp
+				check = false;
+		}
+		printf("LEVELED uppppp\n");
+		mouse.MouseMoveArea(160, 970, 340, 990);
+		mouse.LeftClick();
+	}
+	return check;
+}
+
 //when all else fails. gtfo
 void InterfaceGeneral::Logout()
 {

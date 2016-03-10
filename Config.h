@@ -83,6 +83,8 @@ static const Pixel pixInv(0xfbeaea00, 1489 + SCREEN, 720);
 #define INV_ITEM_WIDTH 32 //width of an item
 #define INV_ITEM_HORIZ_SPACER 10//pizel difference horizontally between items
 #define INV_ITEM_VERT_SPACER 4//pixel difference vertical between items
+#define INV_MAGIC_SPELL_HEIGHT 24 //height of a spell
+#define INV_MAGIC_SPELL_WIDTH 24 //height of a spell
 
 const int GAME_CENTER_X = 821 + SCREEN; //center of gameplay window X coord
 const int GAME_CENTER_Y = 504 + SCREEN; //center of gameplay window Y coord

@@ -5,6 +5,7 @@ class InterfaceInventory : public InterfaceGeneral
 {
 protected:
 	 POINT InvStart; //inventory with relation to the relative inventory pixel
+	 POINT SpellStart; //where the spells start relative to inv pixel
 
 public:
 	InterfaceInventory(); //constructor
@@ -15,8 +16,26 @@ public:
 	//checks inventory is open, if not, then opens it.
 	void VerifyActiveInventory();
 
+	//check if magics is open
+	bool VerifyMagicOpen();
+
+	//checks Magic tab is open, if not, then opens it.
+	void VerifyActiveMagic();
+
+	//check if combatstyle is open
+	bool VerifyCombatStyleOpen();
+
+	//checks Magic tab is open, if not, then opens it.
+	void VerifyActiveCombatStyle();
+
+	//give the x,y coord of spell, get coords of that spell. Zero Indexed - 1st spell (0,0) 2nd @ (1,0) ...
+	POINT GetSpellCoords(int spellX, int spellY);
+
 	//Gets Top Left coordinates of any inventory space ZERO INDEXED
 	POINT GetItemCoords(int itemIndex);
+
+	//given book x,y zero indexed position of spell. moves mouse there
+	void MoveToSpell(int spellX, int spellY);
 
 	//moves to any pixel on an item given its index
 	void MoveToItem(int itemIndex);

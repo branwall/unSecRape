@@ -35,6 +35,46 @@ int InterfaceStats::VerifyCombat()
 	return 0;
 }
 
+int InterfaceStats::VerifyCombat(int mode)
+{
+	unsigned int RedTL = 0x87332600;
+	unsigned int GreenTL = 0x38802600;
+	unsigned int taken = 0xd4d0be00;
+
+
+	//check that if monster targeted, that said monster is not taken
+	if ((pix.SearchPixelArea(RedTL, 10 + SCREEN, 71, 131 + SCREEN, 86, 15)) || (pix.SearchPixelArea(GreenTL, 10 + SCREEN, 71, 131 + SCREEN, 86, 15)))
+	{
+		if (pix.SearchPixelArea(taken, 10 + SCREEN, 87, 22 + SCREEN, 96, 25)) //checks if taken
+			return 2;
+	}
+
+	if (mode == 0) // LOOSE targeting
+	{
+		//check for red -- OR -- green in health bar at TopLeft!
+		if ((pix.SearchPixelArea(RedTL, 10 + SCREEN, 71, 131 + SCREEN, 86, 15)) || (pix.SearchPixelArea(GreenTL, 10 + SCREEN, 71, 131 + SCREEN, 86, 15)))
+			return 1;
+
+	}
+	else if (mode == 1) // STRICT targeting
+	{
+
+		//check for red -- AND -- green in health bar at TopLeft!
+		if ((pix.SearchPixelArea(RedTL, 10 + SCREEN, 71, 131 + SCREEN, 86, 15)) && (pix.SearchPixelArea(GreenTL, 10 + SCREEN, 71, 131 + SCREEN, 86, 15)))
+			return 1;
+	}
+
+
+	if (CheckEnemyDead())
+		return 3;
+
+	//check the red heart xp gain
+	if (pix.VerifyPixelColor(0xdd4f0100, 843 + SCREEN, 63))
+		return 1;
+
+	return 0;
+}
+
 bool InterfaceStats::CheckEnemyDead()
 {
 	//check for red in health bar at TopLeft!
@@ -81,7 +121,7 @@ bool InterfaceStats::Attack()
 	if (ChooseMenuOptionColorCheck(attackMenuOption, HOVER_NPC)) //if the menu option is has npc colors
 	{
 		mouse.LeftClick();
-		Sleep(2000); //allow for new combat to update
+		Sleep(4500); //allow for new combat to update
 		return true;
 	}
 	return false;
@@ -106,7 +146,7 @@ bool InterfaceStats::Fight(unsigned int color, int x1, int y1, int x2, int y2)
 		return false; //end program, cannot find combat for whatever reason
 	}
 
-	int combatStatus = VerifyCombat();
+	int combatStatus = VerifyCombat(0); // ===================================== SET LOOSE OR STRICT COMBAT HERE
 	if (combatStatus == 0) //Not in Combat
 	{
 		if (combatTimeout > 0)//not in combat, decrease combat timeout by one

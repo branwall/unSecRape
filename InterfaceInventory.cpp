@@ -4,6 +4,9 @@ InterfaceInventory::InterfaceInventory()
 {
 	InvStart.x = pixInv._x - 46;
 	InvStart.y = pixInv._y + 28;
+
+	SpellStart.x = pixInv._x - 50;
+	SpellStart.y = pixInv._y + 35;
 }
 
 //Check inventory open
@@ -21,6 +24,52 @@ void InterfaceInventory::VerifyActiveInventory()
 	}
 }
 
+
+//Check magic open
+bool InterfaceInventory::VerifyMagicOpen()
+{
+	return pix.VerifyPixelColor(0x71261d00, pixInv._x + 123, pixInv._y - 11);
+}
+
+
+//if magic not open, open it
+void InterfaceInventory::VerifyActiveMagic()
+{
+	if (!VerifyMagicOpen())
+	{
+		mouse.MouseMoveArea(pixInv._x + 119, pixInv._y - 13, pixInv._x + 151, pixInv._y + 15); //coordinates of inventory tab
+		mouse.LeftClick();
+	}
+}
+
+//Check combat style open
+bool InterfaceInventory::VerifyCombatStyleOpen()
+{
+	return pix.VerifyPixelColor(0x64221900, pixInv._x - 80, pixInv._y -2);
+}
+
+
+//if combat style not open, open it
+void InterfaceInventory::VerifyActiveCombatStyle()
+{
+	if (!VerifyCombatStyleOpen())
+	{
+		mouse.MouseMoveArea(pixInv._x - 81, pixInv._y - 15, pixInv._x - 55, pixInv._y + 12); //coordinates of inventory tab
+		mouse.LeftClick();
+	}
+}
+
+
+//give the x,y coord of spell, get coords of that spell. Zero Indexed - 1st spell (0,0) 2nd @ (1,0) ...
+POINT InterfaceInventory::GetSpellCoords(int spellX, int spellY)
+{
+	POINT spellLoc;
+	spellLoc.x = SpellStart.x + (spellX*INV_MAGIC_SPELL_WIDTH);
+	spellLoc.y = SpellStart.y + (spellY*INV_MAGIC_SPELL_HEIGHT);
+	return spellLoc;
+}
+
+
 //Gets Top Left coordinates of any inventory space ZERO INDEXED
 POINT InterfaceInventory::GetItemCoords(int itemIndex)
 {
@@ -35,9 +84,24 @@ POINT InterfaceInventory::GetItemCoords(int itemIndex)
 	return InvIndex;
 }
 
+
+//moves to any pixel on an item given its index
+void InterfaceInventory::MoveToSpell(int spellX, int spellY)
+{
+	SetMouseSpeed(0.5);
+	VerifyActiveMagic();
+	Sleep(200);
+	POINT spellIndex = GetSpellCoords(spellX, spellY);
+	mouse.SetDeviation(25);
+	mouse.MouseMoveArea(spellIndex.x, spellIndex.y, spellIndex.x + INV_MAGIC_SPELL_WIDTH , spellIndex.y + INV_MAGIC_SPELL_HEIGHT ); //inset 8 pixels on all sides because hover text is slow on edges
+	mouse.SetDeviation(250);
+}
+
 //moves to any pixel on an item given its index
 void InterfaceInventory::MoveToItem(int itemIndex)
 {
+	VerifyActiveInventory();
+	Sleep(200);
 	POINT InvIndex = GetItemCoords(itemIndex);
 	mouse.SetDeviation(25);
 	mouse.MouseMoveArea(InvIndex.x, InvIndex.y, (InvIndex.x + 8) + (INV_ITEM_WIDTH - 16), (InvIndex.y + 8) + (INV_ITEM_HEIGHT - 16)); //inset 8 pixels on all sides because hover text is slow on edges

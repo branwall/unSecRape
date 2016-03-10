@@ -27,7 +27,7 @@ protected:
 	unsigned int ThievingEXP = 0x00000100;
 	unsigned int color, color2, food;
 
-	int timeout= 35;
+	int timeout= 45;
 	int respawnTimeout = 75;
 
 public:
@@ -52,10 +52,18 @@ public:
 			stat.HandleHotkeys();//ALWAYS BEGIN WITH THIS in loop
 
 			if (stat.VerifyCombat() == 1)
+			{
+				stat.SearchEnemyBloom(color, defaultRegion.x1, defaultRegion.y1, defaultRegion.x2, defaultRegion.y2);
+				if (stat.ChooseMenuOptionColorCheck(0, HOVER_NPC)) //attack!
+				{
+					mouse.LeftClick();
+					Sleep(3000);
+				}
 				continue;
+			}
 
 			if (stat.CheckExperienceCircle(ThievingEXP, 1))
-				timeout = 35;
+				timeout = 45;
 
 			if (respawnTimeout <= 0)//move to reset respawn of trapped guy
 			{
@@ -69,13 +77,14 @@ public:
 
 			if (timeout <= 0)
 			{
+				printf("=========================== Could not find any more thieving targets ====================");
 				inv.Logout();
 				break;
 			}
 
 			if (!inv.AttemptToEatAtHp(food,75))
 			{
-				printf("NO FOOOD FOUND!!\n");
+				printf("============================= NO FOOOD FOUND!! =====================\n");
 				inv.Logout();
 				break;
 			}

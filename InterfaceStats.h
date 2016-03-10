@@ -17,6 +17,11 @@ public:
 	//returns '0' if not in combat, '1' if in combat, and '2' if monster is already taken by someone else, and '3' if the monster is just dying
 	int VerifyCombat();
 
+	//different options of combat verifying. 
+	// '0' is loose verification. returns true on a number of combat identifiers
+	// '1' is strict. it returns on XP bubble and only once youve dealt damage to something
+	int VerifyCombat(int mode);
+
 	//if already in combat, this checks for when the monster reaches 0/0 health
 	bool CheckEnemyDead();
 
