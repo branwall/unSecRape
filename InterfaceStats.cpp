@@ -277,9 +277,13 @@ int InterfaceStats::GetSector(Area region, POINT coords)
 //returns true if color is found in bubble 
 bool InterfaceStats::CheckExperienceCircle(unsigned int color, int numBubbles)
 {
+	bool check = true;
 	if (numBubbles = 1)
-		return pix.SearchPixelArea(color, 800+SCREEN, 60, 830+SCREEN, 70, 10);
-	return false;
+	{
+		check &= pix.SearchPixelArea(color, 800 + SCREEN, 60, 830 + SCREEN, 70, 10);
+		//check &= pix.SearchPixelArea(0x4b483700, 800 + SCREEN, 60, 830 + SCREEN, 70,50); //checks background of bubble
+	}
+	return check;
 }
 
 //takes a selected area and returns a specific sector of said area.
@@ -340,4 +344,17 @@ bool InterfaceStats::DetecMovement()
 {
 	return false;
 
+}
+
+
+//Verifies that runescape is up
+bool InterfaceStats::VerifyRunescapeWindow()
+{
+	bool Check = true;
+
+	Check &= pix.VerifyPixelColor(pixChat);
+	Check &= pix.VerifyPixelColor(pixStats);
+	Check &= pix.VerifyPixelColor(pixInv);
+
+	return Check;
 }

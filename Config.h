@@ -1,4 +1,6 @@
 #pragma once
+#include "Password.h" //runescape password for logging in
+
 /*
 /		Coordinates assume running OSBuddy runscape client FULLSCREEN on a 1920x1080 monitor
 /
@@ -88,4 +90,5 @@ static const Pixel pixInv(0xfbeaea00, 1489 + SCREEN, 720);
 
 const int GAME_CENTER_X = 821 + SCREEN; //center of gameplay window X coord
 const int GAME_CENTER_Y = 504 + SCREEN; //center of gameplay window Y coord
+
 #endif

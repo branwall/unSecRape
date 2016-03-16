@@ -23,16 +23,22 @@ int main()
 		GetMessage(&msg, NULL, 0, 0);
 	} */
 
+	unsigned int ThievingEXP = 0x00000100;
+
+
 
 	InterfaceInventory inv;
 	PixelHandler pix;
+	Keyboard key;
 	//pix.DEBUG();
 	InterfaceStats stat;
 
 	//BotMagicCurse me;
-	//BotThievingPickpocket me;
-	BotMeleeCow me;
+	BotThievingPickpocket me;
+	//BotMeleeCow me;
 
+	//me.run(me.Paladin1, me.Paladin1, me.cake);
+	//me.run(me.AdroKnight1,me.AdroKnight2,me.PineapplePizza);
 	me.run();
 	std::cin.ignore();
 	return 0;

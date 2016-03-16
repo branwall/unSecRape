@@ -32,14 +32,15 @@ public:
 					mouse.MouseMoveArea(1536+SCREEN,790,1595+SCREEN,825);
 					mouse.LeftClick();
 					currentStyle = 2;
+					Sleep(2500);
 				}
-				else if (currentStyle == 2 ) //switch to attk
+				else if (currentStyle == 2) //switch to attk
 				{
 					mouse.MouseMoveArea(1452 + SCREEN, 790, 1512 + SCREEN, 825);
 					mouse.LeftClick();
 					currentStyle = 1;
+					Sleep(2500);
 				}
-
 
 			}
 

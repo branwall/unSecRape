@@ -7,8 +7,11 @@ InterfaceGeneral::InterfaceGeneral() // constructor (sets hotkeys)
 	RegisterHotKey(NULL, 1, 0, ESCAPE); //Pause the program, (needs enter to resume)
 	RegisterHotKey(NULL, 2, MOD_SHIFT, ESCAPE);
 
+	logTimeout = 4;
+
 	//PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE);
 	//GetMessage(&msg, 0, 0, 0); //set to receive
+
 }
 
 
@@ -240,4 +243,69 @@ void InterfaceGeneral::SetMouseSpeed(float speed)
 {
 	mouse.ChangeSpeed(speed);
 	return;
+}
+
+
+//checks if loggedout or in process of logging in.
+//if false, it is logged out
+//if true, it is logged in
+bool InterfaceGeneral::CheckIfInGame()
+{
+	unsigned int blackBorder = 0x00000000;
+	bool Check = true;
+
+	//checks left side
+	Check &= pix.VerifyPixelColor(blackBorder, 300 + SCREEN, 50);
+	Check &= pix.VerifyPixelColor(blackBorder, 300 + SCREEN, 350);
+	Check &= pix.VerifyPixelColor(blackBorder, 300 + SCREEN, 550);
+
+	//bottom section
+	Check &= pix.VerifyPixelColor(blackBorder, 700 + SCREEN, 700);
+
+	//checks right side
+	Check &= pix.VerifyPixelColor(blackBorder, 1250 + SCREEN, 50);
+	Check &= pix.VerifyPixelColor(blackBorder, 1250 + SCREEN, 350);
+	Check &= pix.VerifyPixelColor(blackBorder, 1250 + SCREEN, 550);
+
+	//inverse as currently its checking for the black
+	return !Check;
+}
+
+//after 6 hours it logs you out. this logs you back innnn
+bool InterfaceGeneral::HandleAutoLogOut()
+{
+	const int passwordLen = sizeof(password);
+	char pass[passwordLen];
+	strncpy_s(pass, password, passwordLen);
+
+	if (!CheckIfInGame()) //confirmed logout
+	{
+
+		if (logTimeout <= 0)
+			exit(0);
+
+		printf("======================= Auto Logout Detected ==============================\n");
+		if (pix.VerifyPixelColor(0xf1f2a000, 700 + SCREEN, 130)) //yellow sword crossguard
+		{
+			printf("Logout screen sword glint\n");
+			mouse.MouseMoveArea(784+SCREEN, 302, 810+SCREEN, 307); //move login
+			Sleep(100);
+			mouse.LeftClick();
+			key.Type(pass,passwordLen);//type dat password yo
+			key.GenerateKey(VK_RETURN, false, false); //send enter
+			Sleep(10000);
+		}
+
+		if (pix.VerifyPixelColor(0xab837f00, 713 + SCREEN, 326)) //red buttons border highlight
+		{
+			printf("Loggin screen red button\n");
+			mouse.MouseMoveArea(713+SCREEN,327,930+SCREEN, 400); //move to red button
+			Sleep(100);
+			mouse.LeftClick();
+			Sleep(3000);
+			logTimeout--;
+		}
+	}
+
+	return false;
 }

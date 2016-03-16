@@ -1,4 +1,5 @@
 #pragma once
+#include "Keyboard.h"
 #include "Mouse.h"
 #include "Pixel.h"
 #include <iostream>
@@ -9,6 +10,9 @@ class InterfaceGeneral
 protected: 
 	Mouse mouse;
 	PixelHandler pix;
+	Keyboard key;
+
+	int logTimeout;
 	POINT MousePos;
 	bool menu5Option = false;
 	MSG msg; //for hotkey message recieving
@@ -59,5 +63,13 @@ public:
 
 	//sets mouse move speed 0.1-1.0 where lower is faster
 	void SetMouseSpeed(float speed);
+
+	//checks if loggedout or in process of logging in.
+	//if false, it is logged out
+	//if true, it is logged in
+	bool CheckIfInGame();
+
+	//after 6 hours it logs you out. this logs you back innnn
+	bool HandleAutoLogOut();
 
 };

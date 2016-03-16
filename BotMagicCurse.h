@@ -10,7 +10,7 @@ protected:
 	POINT spell;
 	POINT enemy;
 	Mouse mouse;
-	int spellTimeout = 3;
+	int spellTimeout = 15;
 
 	InterfaceInventory inv;
 	InterfaceStats stat;
@@ -21,9 +21,13 @@ public:
 	{
 		//unsigned int VarrockEastGuardSkirt = 0xcc9c0c00;
 		unsigned int VarrockEastGuardSkirt = 0xa1acad00;
-		inv.SetMouseSpeed(0.5);
+		inv.SetMouseSpeed(0.4);
+		stat.SetMouseSpeed(0.4);
 		while (1)
 		{
+			inv.HandleHotkeys();
+			inv.HandleAutoLogOut();
+
 			if (spellTimeout <= 0) //gout out.
 			{
 				mouse.MouseMove(650, 40);
@@ -49,7 +53,7 @@ public:
 			}
 
 			if (stat.CheckExperienceCircle(0x0006fe00, 1))
-				spellTimeout = 3;
+				spellTimeout = 15;
 
 			//============== SELECT SPELL =================
 			if (!stat.VerifyTopLeftText(HOVER_MAGIC) ||  (  (stat.VerifyTopLeftText(HOVER_MAGIC)) && (stat.VerifyTopLeftText(HOVER_NPC)) ) ) //if its not selected and not misinterpreting a level as a spell
@@ -74,7 +78,7 @@ public:
 					if (stat.ChooseMenuOptionColorCheck(0, HOVER_NPC))
 					{
 						mouse.LeftClick();
-						Sleep(800);
+						Sleep(200);
 					}
 				}
 			}

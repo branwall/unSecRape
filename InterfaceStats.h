@@ -63,4 +63,7 @@ public:
 	//detects when you move in game
 	bool DetecMovement();
 
+	//Verifies that runescape is up
+	bool VerifyRunescapeWindow();
+
 };
