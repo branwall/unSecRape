@@ -111,7 +111,9 @@ void InterfaceInventory::MoveToItem(int itemIndex)
 
 bool InterfaceInventory::CheckSpellRunes(unsigned int color, int spellX, int spellY)
 {
+	SetMouseSpeed(0.3);
 	VerifyActiveMagic();
+	Sleep(50);
 	POINT spell = GetSpellCoords(spellX, spellY);
 	bool result = pix.SearchPixelArea(color, spell.x,spell.y,spell.x+ INV_MAGIC_SPELL_WIDTH, spell.y+INV_MAGIC_SPELL_HEIGHT,10);
 	return result;
