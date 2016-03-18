@@ -18,11 +18,13 @@ public:
 	{
 		while (1)
 		{
-		if (inv.CheckSpellRunes(MAGIC_HEAT, 4, 3))
-			printf("Active SUPERHEAT!\n");
-		else
-			printf("nuttin\n");
-		std::cin.ignore();
+			if (inv.PrepareSpell(TELEBLOCK))
+			{
+				printf("SUCCESS\n");
+			}
+			else
+				printf("nothing to do\n");
+			std::cin.ignore(); //pause loop
 		}
 	}
 

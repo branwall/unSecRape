@@ -43,6 +43,9 @@ public:
 	//check if spell has runes. Given index of spell and a color to verify
 	bool CheckSpellRunes(unsigned int color, int spellX, int spellY);
 
+	//given a pixel containing the active color of a spell, and its spell coords, set up said spell
+	bool PrepareSpell(Pixel spell);
+
 	//Drop an item smartly
 	bool DropItem(int itemIndex);
 

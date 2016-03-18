@@ -90,6 +90,12 @@ static const Pixel pixInv(0xfbeaea00, 1489 + SCREEN, 720);
 
 #define MAGIC_TELE 0x8e8df300 //color of teleport ringsi n every tele spell
 #define MAGIC_ALCH 0xbcc2c000 //color of green bottle in high alch
+#define MAGIC_HEAT 0xb0100200 //color of red fire part in superheat spell
+#define MAGIC_ENTANGLE 0x04af0400 //color of entangle
+
+static const Pixel SUPERHEAT(MAGIC_HEAT, 4, 3); //creates the spell using its active color as well as its spellbook coords
+static const Pixel TELEBLOCK(MAGIC_TELE, 5, 8); //creates a spell for teleblock
+static const Pixel ENTANGLE(MAGIC_ENTANGLE, 1, 8); //create a spell entangle
 
 const int GAME_CENTER_X = 821 + SCREEN; //center of gameplay window X coord
 const int GAME_CENTER_Y = 504 + SCREEN; //center of gameplay window Y coord

@@ -3,7 +3,7 @@
 #include "BotThievingPickpocket.h"
 #include "BotThievingRogueChest.h"
 #include "BotMagicCurse.h"
-#include "BotMagicTeleAlch.h"
+#include "BotMagicSuperheat.h"
 #include "BotMeleeCow.h"
 #include "InterfaceStats.h"
 #include <stdio.h>
@@ -36,9 +36,9 @@ int main()
 	InterfaceStats stat;
 
 	//BotMagicCurse me;
-	//BotMagicTeleAlch me;
+	BotMagicSuperheat me;
 	//BotThievingPickpocket me;
-	BotThievingRogueChest me;
+	//BotThievingRogueChest me;
 	//BotMeleeCow me;
 
 	//me.run(me.Paladin1, me.Paladin1, me.cake);

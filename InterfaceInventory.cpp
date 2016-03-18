@@ -119,6 +119,22 @@ bool InterfaceInventory::CheckSpellRunes(unsigned int color, int spellX, int spe
 	return result;
 }
 
+//given a pixel containing the active color of a spell, and its spell coords, set up said spell
+bool InterfaceInventory::PrepareSpell(Pixel spell)
+{
+	if (CheckSpellRunes(spell._color, spell._x, spell._y)) //if spell exists, and runes available to cast it.
+	{
+		VerifyActiveMagic();
+		Sleep(30);
+		POINT spellCoords = GetSpellCoords(spell._x, spell._y);
+		mouse.MouseMoveArea(spellCoords.x, spellCoords.y, spellCoords.x + INV_MAGIC_SPELL_WIDTH, spellCoords.y + INV_MAGIC_SPELL_HEIGHT);
+		Sleep(30);
+		mouse.LeftClick();
+		return true;
+	}
+	return false;
+}
+
 
 bool InterfaceInventory::DropItem(int itemIndex)
 {

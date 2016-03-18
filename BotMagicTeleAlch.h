@@ -19,8 +19,8 @@ public:
 
 	void run()
 	{
-		//while (1)
-		//{
+		while (1)
+		{
 			if (inv.CheckSpellRunes(MAGIC_TELE, 5, 3))
 				printf("Active Tele!\n");
 			else
@@ -29,7 +29,7 @@ public:
 				printf("Active Alch!\n");
 			else
 				printf("nuttin\n");
-		//}
+		}
 	}
 
 };
