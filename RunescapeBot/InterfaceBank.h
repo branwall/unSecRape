@@ -19,9 +19,6 @@ public:
 	//check if inventory is empty
 	bool VerifyInventoryEmpty();
 
-	//checks Magic tab is open, if not, then opens it.
-	void VerifyActiveMagic();
-
 	//Withdraws x items, typing in the exact amount to set the "x" in game
 	
 	void setWithdrawX(int bankPosition, int x);
