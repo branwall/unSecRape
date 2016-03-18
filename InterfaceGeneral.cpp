@@ -4,6 +4,8 @@
 InterfaceGeneral::InterfaceGeneral() // constructor (sets hotkeys)
 {
 	//arguments Window, HK-ID, SPECIAL-KEYS, HOTKEY
+	//hotkeys can be found on the following link
+	// https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
 	RegisterHotKey(NULL, 1, 0, ESCAPE); //Pause the program, (needs enter to resume)
 	RegisterHotKey(NULL, 2, MOD_SHIFT, ESCAPE);
 
@@ -19,7 +21,6 @@ InterfaceGeneral::~InterfaceGeneral() // Destructor (delets hotkeys on program e
 {
 	UnregisterHotKey(NULL, 1);
 	UnregisterHotKey(NULL,2);
-
 	//HandleHotkeys();
 }
 
@@ -40,7 +41,6 @@ void InterfaceGeneral::HandleHotkeys()
 			printf("================ Program EXITING ==================\n");
 			exit(0); //exit porgram
 		}
-
 
 		msg.message = 0; //reset the message so that it resume;
 		return;
@@ -191,6 +191,30 @@ void InterfaceGeneral::Logout()
 	mouse.MouseMoveArea(Logout);
 	Sleep(400);
 	mouse.LeftClick();
+	return;
+}
+
+//when all else fails. gtfo. quick
+void InterfaceGeneral::LogoutQuick()
+{
+	mouse.ChangeSpeed(0.3);
+	int ClickTimer = 40;
+	Area doorButton(1509 + SCREEN, 1004, 1532 + SCREEN, 1033);
+	Area Logout(1459 + SCREEN, 942, 1584 + SCREEN, 965);
+	mouse.MouseMoveArea(doorButton);
+	Sleep(40);
+	mouse.LeftClick();
+	Sleep(40);
+	mouse.MouseMoveArea(Logout);
+	Sleep(40);
+	mouse.LeftClick();
+	while (VerifyOSbuddy())
+	{
+		if (ClickTimer <= 0)
+			break;
+		Sleep(40);
+		mouse.LeftClick();
+	}
 	return;
 }
 

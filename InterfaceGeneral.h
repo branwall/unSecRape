@@ -56,6 +56,9 @@ public:
 	//when all else fails. gtfo
 	void Logout();
 
+	//For when you just need to get out asap. keeps clicking until logged out
+	void LogoutQuick();
+
 	//checks for black background in health circle
 	//amount should be some 1-100 value. 
 	//returns true if health is there, false if not

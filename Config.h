@@ -88,6 +88,9 @@ static const Pixel pixInv(0xfbeaea00, 1489 + SCREEN, 720);
 #define INV_MAGIC_SPELL_HEIGHT 24 //height of a spell
 #define INV_MAGIC_SPELL_WIDTH 24 //height of a spell
 
+#define MAGIC_TELE 0x8e8df300 //color of teleport ringsi n every tele spell
+#define MAGIC_ALCH 0xbcc2c000 //color of green bottle in high alch
+
 const int GAME_CENTER_X = 821 + SCREEN; //center of gameplay window X coord
 const int GAME_CENTER_Y = 504 + SCREEN; //center of gameplay window Y coord
 

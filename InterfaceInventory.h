@@ -40,6 +40,9 @@ public:
 	//moves to any pixel on an item given its index
 	void MoveToItem(int itemIndex);
 
+	//check if spell has runes. Given index of spell and a color to verify
+	bool CheckSpellRunes(unsigned int color, int spellX, int spellY);
+
 	//Drop an item smartly
 	bool DropItem(int itemIndex);
 

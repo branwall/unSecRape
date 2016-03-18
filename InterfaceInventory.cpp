@@ -109,6 +109,15 @@ void InterfaceInventory::MoveToItem(int itemIndex)
 }
 
 
+bool InterfaceInventory::CheckSpellRunes(unsigned int color, int spellX, int spellY)
+{
+	VerifyActiveMagic();
+	POINT spell = GetSpellCoords(spellX, spellY);
+	bool result = pix.SearchPixelArea(color, spell.x,spell.y,spell.x+ INV_MAGIC_SPELL_WIDTH, spell.y+INV_MAGIC_SPELL_HEIGHT,10);
+	return result;
+}
+
+
 bool InterfaceInventory::DropItem(int itemIndex)
 {
 	int dropOption = 1;
